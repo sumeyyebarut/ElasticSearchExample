@@ -35,8 +35,8 @@ namespace ElasticSearchExample.Controllers
         } //ctor nesnesinde client üzerinden istek yaratmadan önce ayný isimde var mý diye kontrol etmemiz gerekiyor
 
         [HttpGet]
-        [Route("GetFilterByPriceGreaterThan")]
-        public List<Product> GetFilterByPriceGreaterThan()
+        [Route("GetProductByPriceGreaterThan")]
+        public List<Product> GetProductByPriceGreaterThan()
         {
             //search metodu ile indekslenen data üzerinde filtreleme yapabiliriz
             var response = elasticClient.Search<Product>(i => i
@@ -48,6 +48,13 @@ namespace ElasticSearchExample.Controllers
                 products.Add(item);
             return products;
 
+        }
+        [HttpGet]
+        [Route("GetProductById")]
+        public async Task<Product> GetProductById(string indexName,string id)
+        {
+            var response = elasticClient.Get<Product>(id, q => q.Index(indexName));
+            return response.Source;
         }
 
 
